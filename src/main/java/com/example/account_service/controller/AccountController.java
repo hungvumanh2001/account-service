@@ -1,9 +1,12 @@
 package com.example.account_service.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.account_service.client.StatisticService;
 import com.example.account_service.model.AccountDTO;
+import com.example.account_service.model.StatisticDTO;
 import com.example.account_service.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +24,16 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    
+    @Autowired
+    private StatisticService statisticService;
 
     // add new
     @PostMapping("/account")
     public AccountDTO addAccount(@RequestBody AccountDTO accountDTO) {
         accountService.add(accountDTO);
+        
+        statisticService.add(new StatisticDTO("Account " + accountDTO.getUsername() + " is created", new Date()));
         return accountDTO;
     }
 
